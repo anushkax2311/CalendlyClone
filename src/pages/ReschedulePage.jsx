@@ -49,8 +49,11 @@ export default function ReschedulePage() {
     if (!selectedDate || !booking) return
     const slug = booking.event_slug || booking.event_type_slug || '30min'
     getAvailableSlots(slug, selectedDate.format('YYYY-MM-DD'))
-      .then(r => setSlots(r.data))
-      .catch(()=> setSlots(generateSlots(selectedDate)))
+  .then(r => setSlots(r.data))
+  .catch(() => {
+    setSlots([])
+    setError('Unable to load available slots.')
+  })
     setSelectedSlot(null)
   },[selectedDate])
 
