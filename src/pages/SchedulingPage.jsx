@@ -8,8 +8,9 @@ const DURATIONS = [15, 30, 45, 60, 90, 120]
 const COLORS = ['#006bff', '#6c3fc5', '#00a86b', '#e53935', '#ff6d00', '#0097a7']
 const BUFFERS = [0, 5, 10, 15, 30]
 
-function EventCard({ event, onEdit, onDelete, onCopyLink }) {
-  const [menuOpen, setMenuOpen] = useState(false)
+function EventCard({ event, onEdit, onDelete, onCopyLink,openMenuId,
+  setOpenMenuId }) {
+  
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 })
   const btnRef = useRef(null)
   const bookingUrl = `${window.location.origin}/book/${event.slug}`
@@ -27,7 +28,7 @@ function EventCard({ event, onEdit, onDelete, onCopyLink }) {
 
   useEffect(() => {
     if (!menuOpen) return
-    const close = () => setMenuOpen(false)
+    const close = () => setOpenMenuId(null)
     setTimeout(() => {
   document.addEventListener('click', close)
 }, 0)
@@ -60,7 +61,16 @@ function EventCard({ event, onEdit, onDelete, onCopyLink }) {
             <a className="event-share-label" href={bookingUrl} target="_blank" rel="noreferrer">
               View booking page
             </a>
-            <button ref={btnRef} className="icon-btn" onClick={e => { e.stopPropagation(); openMenu() }}>
+            <button ref={btnRef} className="icon-btn" onClick={e => { e.stopPropagation(); const openMenu = () => {
+  const rect = btnRef.current.getBoundingClientRect()
+
+  setMenuPos({
+    top: rect.bottom + 4,
+    left: rect.right - 160
+  })
+
+  setOpenMenuId(prev => prev === event.id ? null : event.id)
+} }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="#637488">
                 <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
               </svg>
@@ -77,15 +87,15 @@ function EventCard({ event, onEdit, onDelete, onCopyLink }) {
         </div>
       </div>
 
-      {menuOpen && createPortal(
+      {openMenuId === event.id && createPortal(
         <div className="event-dropdown" style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, zIndex: 9999 }}
           onClick={e => e.stopPropagation()}>
-          <button onClick={() => { onEdit(event); setMenuOpen(false) }}>Edit</button>
-          <button onClick={() => { onCopyLink(bookingUrl); setMenuOpen(false) }}>Copy link</button>
-          <button onClick={() => { onEdit({ ...event, is_active: !event.is_active, _toggle: true }); setMenuOpen(false) }}>
+          <button onClick={() => { onEdit(event); setOpenMenuId(null) }}>Edit</button>
+          <button onClick={() => { onCopyLink(bookingUrl); setOpenMenuId(null) }}>Copy link</button>
+          <button onClick={() => { onEdit({ ...event, is_active: !event.is_active, _toggle: true }); setOpenMenuId(null) }}>
             {event.is_active ? 'Deactivate' : 'Activate'}
           </button>
-          <button className="danger" onClick={() => { onDelete(event.id); setMenuOpen(false) }}>Delete</button>
+          <button className="danger" onClick={() => { onDelete(event.id); setOpenMenuId(null) }}>Delete</button>
         </div>,
         document.body
       )}
@@ -325,6 +335,7 @@ export default function SchedulingPage() {
   const [search, setSearch] = useState('')
   const [toast, setToast] = useState(null)
   const [activeTab, setActiveTab] = useState('event-types')
+  const [openMenuId, setOpenMenuId] = useState(null)
 
 
   const location = useLocation()
@@ -445,10 +456,18 @@ const filtered = Array.isArray(events)
             </div>
           ) : (
             <div className="event-cards-list">
-              {filtered.map(ev => (
-                <EventCard key={ev.id} event={ev} onEdit={handleEdit} onDelete={handleDelete} onCopyLink={handleCopyLink} />
-              ))}
-            </div>
+  {filtered.map(ev => (
+    <EventCard
+      key={ev.id}
+      event={ev}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+      onCopyLink={handleCopyLink}
+      openMenuId={openMenuId}
+      setOpenMenuId={setOpenMenuId}
+    />
+  ))}
+</div>
           )}
       </div>
       {modalOpen && (
