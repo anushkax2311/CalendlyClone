@@ -1,45 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
+import { getEventTypeBySlug, getAvailableSlots, createBooking } from '../api/index.js';
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 🔌 BACKEND MOCK FUNCTIONS
+// ✅ HELPER FUNCTIONS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-const mockEventData = {
-  '30min': {
-    id: 1,
-    name: '30 Minute Meeting',
-    slug: '30min',
-    duration_minutes: 30,
-    color: '#006bff',
-    location: 'Google Meet',
-    host_name: 'Anushka Patel',
-    host_timezone: 'Asia/Kolkata',
-    buffer_before: 0,
-    buffer_after: 5,
-    questions: [
-      { id: 'q1', label: 'What would you like to discuss?', required: false },
-      { id: 'q2', label: 'Please share any relevant links or docs', required: false },
-    ],
-  },
-};
-
-const mockBookings = {};
-
-// Get event type by slug
-const getEventTypeBySlug = (slug) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (mockEventData[slug]) {
-        resolve({ data: mockEventData[slug] });
-      } else {
-        reject(new Error('Event not found'));
-      }
-    }, 500);
-  });
-};
-
-// Generate time slots for a specific date
+// Generate time slots for a specific date (fallback if API fails)
 const generateSlots = (date) => {
   const slots = [];
   const dow = dayjs(date).day();
@@ -55,45 +22,6 @@ const generateSlots = (date) => {
     }
   }
   return slots;
-};
-
-// Get available slots for a date
-const getAvailableSlots = (slug, dateStr) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      try {
-        const date = dayjs(dateStr);
-        const slots = generateSlots(date);
-        
-        // Mock: randomly mark some slots as unavailable (15% chance)
-        const slotsWithAvailability = slots.map(slot => ({
-          ...slot,
-          available: Math.random() > 0.15
-        }));
-        
-        resolve({ data: slotsWithAvailability });
-      } catch (error) {
-        console.error('Error generating slots:', error);
-        reject(error);
-      }
-    }, 400);
-  });
-};
-
-// Create booking
-const createBooking = (bookingData) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const id = `booking_${Date.now()}`;
-      mockBookings[id] = {
-        id,
-        ...bookingData,
-        created_at: new Date().toISOString(),
-        status: 'confirmed',
-      };
-      resolve({ data: { id, ...mockBookings[id] } });
-    }, 800);
-  });
 };
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -713,7 +641,10 @@ function BookingPage({ eventSlug = '30min' }) {
   useEffect(() => {
     getEventTypeBySlug(eventSlug)
       .then(r => setEvent(r.data))
-      .catch(() => setEvent(null))
+      .catch(err => {
+        console.error('Failed to fetch event:', err);
+        setEvent(null);
+      })
       .finally(() => setLoading(false));
   }, [eventSlug]);
 
