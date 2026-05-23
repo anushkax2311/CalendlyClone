@@ -435,13 +435,12 @@ export default function SchedulingPage() {
 
   const location = useLocation()
 
-  useEffect(() => {
-    if (location.state?.openCreate) {
-      setEditing(null)
-      setModalOpen(true)
-      window.history.replaceState({}, '')
-    }
-  }, [location.state])
+ useEffect(() => {
+  if (location.state?.openCreate) {
+    setEditing(null)
+    setModalOpen(true)
+  }
+}, [location.state])
 
 
   const showToast = (msg, type = 'success') => {
