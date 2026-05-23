@@ -64,18 +64,18 @@
   padding: 40px 40px;
   overflow-y: auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Heading always on top, full width */
 .booking-panel-title {
-  font-size: 18px; font-weight: 600;
+  font-size: 18px; 
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 28px;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 10;
-  padding: 16px 0;
+  width: 100%;
+  display: block;
 }
 
 /* Calendar + slots side by side BELOW the heading */
