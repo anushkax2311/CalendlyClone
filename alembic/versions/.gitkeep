@@ -1,0 +1,4 @@
+# Alembic migration versions go here.
+# The app auto-creates tables via SQLAlchemy on startup,
+# so migrations are only needed for schema changes after initial deploy.
+# Run: alembic revision --autogenerate -m "description"

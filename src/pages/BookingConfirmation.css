@@ -1,0 +1,83 @@
+.confirmation-page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.confirmation-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: 48px 40px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.confirmation-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.confirmation-title {
+  font-size: 26px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 8px;
+}
+
+.confirmation-sub {
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;
+}
+.confirmation-sub strong { color: var(--text-primary); font-weight: 600; }
+
+.confirmation-details {
+  background: var(--bg-page);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.confirmation-detail-row {
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.confirmation-detail-row svg { flex-shrink: 0; margin-top: 2px; }
+
+.detail-label {
+  font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px;
+}
+
+.detail-value { font-size: 13px; color: var(--text-secondary); }
+
+.confirmation-email-note {
+  font-size: 12px; color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.confirmation-actions { display: flex; justify-content: center; }
+
+.btn-book-another {
+  background: none;
+  border: 1.5px solid var(--blue-primary);
+  color: var(--blue-primary);
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; font-family: var(--font);
+  transition: all 0.15s;
+}
+.btn-book-another:hover { background: var(--blue-light); }
+
+/* Answers section */
+.confirmation-answers { text-align: left; margin-bottom: 20px; }
+.confirmation-answers h4 { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.answer-row { margin-bottom: 10px; }
+.answer-question { font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+.answer-value { font-size: 13px; color: var(--text-secondary); }

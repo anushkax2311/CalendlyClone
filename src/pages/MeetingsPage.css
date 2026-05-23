@@ -1,0 +1,150 @@
+.meetings-page { display: flex; flex-direction: column; min-height: 100%; }
+
+.meetings-filter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.filter-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  background: white;
+}
+
+.show-buffers {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Toggle (shared) */
+.toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; inset: 0; background: #ccc; border-radius: 20px; cursor: pointer; transition: 0.2s; }
+.toggle-slider::before { content: ''; position: absolute; width: 14px; height: 14px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+.toggle-switch input:checked + .toggle-slider { background: var(--blue-primary); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+/* Meetings list */
+.meetings-list { display: flex; flex-direction: column; gap: 1px; }
+
+.meeting-row {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 20px;
+  padding: 18px 20px;
+  align-items: start;
+  margin-bottom: 8px;
+  transition: box-shadow 0.15s;
+  animation: fadeIn 0.2s ease forwards;
+}
+.meeting-row:hover { box-shadow: var(--shadow-sm); }
+.meeting-row.cancelled { opacity: 0.6; }
+
+.meeting-datetime {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.meeting-date { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.meeting-time { font-size: 12px; color: var(--text-secondary); }
+
+.meeting-info { display: flex; flex-direction: column; gap: 6px; }
+
+.meeting-event-name { font-size: 14px; font-weight: 600; color: var(--blue-primary); }
+
+.meeting-invitee { display: flex; align-items: center; gap: 10px; }
+
+.meeting-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--blue-light); color: var(--blue-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; flex-shrink: 0;
+}
+
+.invitee-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+.invitee-email { font-size: 12px; color: var(--text-muted); }
+
+.meeting-location {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--text-muted);
+}
+
+.meeting-actions { display: flex; align-items: flex-start; padding-top: 2px; }
+
+.meeting-action-btns { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+
+.btn-reschedule-meeting {
+  background: none; border: 1px solid var(--blue-primary);
+  padding: 6px 16px; border-radius: 20px; font-size: 13px;
+  color: var(--blue-primary); cursor: pointer; font-family: var(--font);
+  transition: all 0.15s;
+}
+.btn-reschedule-meeting:hover { background: var(--blue-light); }
+
+.btn-cancel-meeting {
+  background: none;
+  border: 1px solid var(--border);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.15s;
+}
+.btn-cancel-meeting:hover { border-color: var(--red); color: var(--red); }
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.badge.cancelled { background: #ffeaea; color: var(--red); }
+.badge.past { background: #e8f5e9; color: var(--green); }
+
+/* Empty state */
+.empty-state-meetings {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 20px; gap: 16px;
+}
+.empty-calendar-icon { position: relative; display: inline-flex; }
+.empty-badge {
+  position: absolute; top: -6px; right: -6px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--text-muted); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600;
+}
+.empty-msg { font-size: 14px; color: var(--text-muted); }
+
+/* Shared */
+.notice-banner { background: #f0f5ff; border-bottom: 1px solid #c7d9ff; padding: 12px 24px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-secondary); }
+.notice-actions { margin-left: auto; display: flex; gap: 8px; }
+.btn-review { background: white; border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; color: var(--text-primary); cursor: pointer; font-family: var(--font); }
+.btn-accept-terms { background: var(--blue-primary); color: white; border: none; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font); }
+.page-inner { padding: 24px 32px; max-width: 900px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.page-title { font-size: 22px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+.help-btn { background: none; padding: 2px; display: flex; align-items: center; }
+.page-tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+.tab-btn { background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; padding: 10px 16px; font-size: 14px; color: var(--text-secondary); cursor: pointer; font-family: var(--font); transition: all 0.15s; }
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active { color: var(--blue-primary); border-bottom-color: var(--blue-primary); font-weight: 500; }
+.loading-state { display: flex; justify-content: center; padding: 60px; }
+.spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--blue-primary); border-radius: 50%; animation: spin 0.7s linear infinite; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--navy-dark); color: white; padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 500; z-index: 2000; animation: fadeIn 0.2s ease; }
