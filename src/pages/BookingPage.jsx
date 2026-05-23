@@ -56,13 +56,23 @@ export default function BookingPage() {
       .finally(() => setLoading(false))
   }, [slug])
 
-  useEffect(() => {
-    if (!selectedDate) return
-    getAvailableSlots(slug, selectedDate.format('YYYY-MM-DD'))
-      .then(res => setSlots(res.data))
-      .catch(() => setSlots(generateSlots(selectedDate)))
-    setSelectedSlot(null)
-  }, [selectedDate])
+useEffect(() => {
+  if (!selectedDate) return
+
+  setError('')
+
+  getAvailableSlots(slug, selectedDate.format('YYYY-MM-DD'))
+    .then(res => {
+      setSlots(res.data)
+    })
+    .catch((err) => {
+      console.error(err)
+      setSlots([])
+      setError('Unable to load available slots.')
+    })
+
+  setSelectedSlot(null)
+}, [selectedDate])
 
   // Validate form before submit
   const validate = () => {
