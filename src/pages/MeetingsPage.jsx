@@ -86,7 +86,13 @@ export default function MeetingsPage() {
 
   useEffect(()=>{
     getBookings()
-      .then(r=>setMeetings(r.data))
+      .then(r => {
+  const data = Array.isArray(r.data)
+    ? r.data
+    : r.data.bookings || []
+
+  setMeetings(data)
+})
       .catch(()=>setMeetings(SEED))
       .finally(()=>setLoading(false))
   },[])
@@ -103,8 +109,15 @@ export default function MeetingsPage() {
   }
 
   const now      = dayjs()
-  const upcoming = meetings.filter(m => dayjs(m.start_time).isAfter(now) && m.status !== 'cancelled')
-  const past     = meetings.filter(m => dayjs(m.start_time).isBefore(now) || m.status === 'cancelled')
+const safeMeetings = Array.isArray(meetings) ? meetings : []
+
+const upcoming = safeMeetings.filter(
+  m => dayjs(m.start_time).isAfter(now) && m.status !== 'cancelled'
+)
+
+const past = safeMeetings.filter(
+  m => dayjs(m.start_time).isBefore(now) || m.status === 'cancelled'
+)
   const displayed = activeTab === 'upcoming' ? upcoming : past
 
   return (

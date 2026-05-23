@@ -132,7 +132,17 @@ export default function AvailabilityPage() {
   useEffect(() => {
     getSchedules()
       .then(res => {
-        setSchedules(res.data)
+        const data = Array.isArray(res.data)
+  ? res.data
+  : res.data.schedules || []
+
+setSchedules(data)
+
+if (data.length > 0) {
+  const def = data.find(s => s.is_default) || data[0]
+  setActiveId(def.id)
+  setDays(def.days?.length ? def.days : DEFAULT_DAYS())
+}
         if (res.data.length > 0) {
           const def = res.data.find(s=>s.is_default) || res.data[0]
           setActiveId(def.id)
@@ -161,7 +171,13 @@ export default function AvailabilityPage() {
   useEffect(()=>{
     if (!activeId) return
     getDateOverrides(activeId)
-      .then(res=>setOverrides(res.data))
+      .then(res => {
+  const data = Array.isArray(res.data)
+    ? res.data
+    : res.data.overrides || []
+
+  setOverrides(data)
+})
       .catch(()=>setOverrides([]))
   },[activeId])
 
@@ -272,7 +288,7 @@ export default function AvailabilityPage() {
               )}
 
               <div className="sched-list">
-                {schedules.map(s=>(
+                {Array.isArray(schedules) && schedules.map(s=>(
                   <div key={s.id} className={`sched-list-item ${activeId===s.id?'active':''}`}
                     onClick={()=>selectSchedule(s)}>
                     <div className="sched-list-left">
@@ -404,7 +420,7 @@ export default function AvailabilityPage() {
 
                     {overrides.length > 0 && (
                       <div className="overrides-list">
-                        {overrides.map(ov=>(
+                        {Array.isArray(overrides) && overrides.map(ov=>(
                           <div key={ov.id} className="override-row">
                             <div className="override-info">
                               <span className="override-date">{dayjs(ov.date).format('ddd, MMM D, YYYY')}</span>
