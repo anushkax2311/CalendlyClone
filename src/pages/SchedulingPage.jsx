@@ -389,9 +389,11 @@ export default function SchedulingPage() {
     navigator.clipboard.writeText(url).then(() => showToast('Link copied!'))
   }
   console.log("events =", events)
-const filtered = (events || []).filter(
-  e => e.name.toLowerCase().includes(search.toLowerCase())
-)
+const filtered = Array.isArray(events)
+  ? events.filter(
+      e => e?.name?.toLowerCase().includes(search.toLowerCase())
+    )
+  : []
 
   return (
     <div className="scheduling-page fade-in">
