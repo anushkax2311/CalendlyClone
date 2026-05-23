@@ -48,6 +48,7 @@ export default function BookingPage() {
   const [answers, setAnswers] = useState({})   // { questionId: answer }
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
+  const [error, setError] = useState('')
 
   useEffect(() => {
     getEventTypeBySlug(slug)
@@ -59,7 +60,7 @@ export default function BookingPage() {
 useEffect(() => {
   if (!selectedDate) return
 
-  setError('')
+  
 
   getAvailableSlots(slug, selectedDate.format('YYYY-MM-DD'))
     .then(res => {
@@ -68,7 +69,7 @@ useEffect(() => {
     .catch((err) => {
       console.error(err)
       setSlots([])
-      setError('Unable to load available slots.')
+      
     })
 
   setSelectedSlot(null)
