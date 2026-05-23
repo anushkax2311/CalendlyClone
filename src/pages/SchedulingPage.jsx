@@ -439,6 +439,7 @@ export default function SchedulingPage() {
   if (location.state?.openCreate) {
     setEditing(null)
     setModalOpen(true)
+    window.history.replaceState({}, '')
   }
 }, [location.state])
 
