@@ -339,7 +339,9 @@ export default function SchedulingPage() {
   const loadEvents = async () => {
     try {
       const res = await getEventTypes()
+      console.log(res.data)
       setEvents(res.data)
+
     } catch {
       setEvents([
         { id: 1, name: '30 Minute Meeting', duration_minutes: 30, slug: '30min', color: '#006bff', location: 'Google Meet', is_active: true, buffer_before: 0, buffer_after: 5, questions: [{ id: 'q1', label: 'What would you like to discuss?', required: false }] },
@@ -386,8 +388,10 @@ export default function SchedulingPage() {
   const handleCopyLink = (url) => {
     navigator.clipboard.writeText(url).then(() => showToast('Link copied!'))
   }
-
-  const filtered = events.filter(e => e.name.toLowerCase().includes(search.toLowerCase()))
+  console.log("events =", events)
+const filtered = (events || []).filter(
+  e => e.name.toLowerCase().includes(search.toLowerCase())
+)
 
   return (
     <div className="scheduling-page fade-in">
