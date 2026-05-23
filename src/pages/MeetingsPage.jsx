@@ -39,7 +39,9 @@ function MeetingRow({ meeting, onCancel, onReschedule }) {
       <div className="meeting-info">
         <span className="meeting-event-name">{meeting.event_name}</span>
         <div className="meeting-invitee">
-          <div className="meeting-avatar">{meeting.invitee_name[0]}</div>
+          <div className="meeting-avatar">
+  {meeting.invitee_name?.[0] || 'U'}
+</div>
           <div>
             <p className="invitee-name">{meeting.invitee_name}</p>
             <p className="invitee-email">{meeting.invitee_email}</p>
