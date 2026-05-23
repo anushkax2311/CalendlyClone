@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import engine, SessionLocal
-from .models import Base
-from .routers import event_router, bookings_router, public_router, sched_router, override_router
-from .seed import seed_database
+from database import engine, SessionLocal
+from models import Base
+from routers import event_router, bookings_router, public_router, sched_router, override_router
+from seed import seed_database
 
 
 @asynccontextmanager
