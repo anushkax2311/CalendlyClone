@@ -61,8 +61,13 @@ export default function ReschedulePage() {
       const duration = booking.duration_minutes ||
         dayjs(booking.end_time).diff(dayjs(booking.start_time), 'minute') || 30
       const [h, m] = selectedSlot.split(':').map(Number)
-      const newStart = selectedDate.hour(h).minute(m).second(0).toISOString()
-      const newEnd   = selectedDate.hour(h).minute(m + duration).second(0).toISOString()
+      const newStart = selectedDate.hour(h).minute(m).second(0).format('YYYY-MM-DDTHH:mm:ss')
+
+const newEnd = selectedDate
+  .hour(h)
+  .minute(m + duration)
+  .second(0)
+  .format('YYYY-MM-DDTHH:mm:ss')
       await rescheduleBooking(bookingId, { new_start_time: newStart, new_end_time: newEnd })
       setDone(true)
     } catch (e) {
