@@ -15,15 +15,22 @@ function EventCard({ event, onEdit, onDelete, onCopyLink }) {
   const bookingUrl = `${window.location.origin}/book/${event.slug}`
 
   const openMenu = () => {
-    const rect = btnRef.current.getBoundingClientRect()
-    setMenuPos({ top: rect.bottom + 4, left: rect.right - 160 })
-    setMenuOpen(true)
-  }
+  const rect = btnRef.current.getBoundingClientRect()
+
+  setMenuPos({
+    top: rect.bottom + 4,
+    left: rect.right - 160
+  })
+
+  setMenuOpen(prev => !prev)
+}
 
   useEffect(() => {
     if (!menuOpen) return
     const close = () => setMenuOpen(false)
-    document.addEventListener('click', close)
+    setTimeout(() => {
+  document.addEventListener('click', close)
+}, 0)
     return () => document.removeEventListener('click', close)
   }, [menuOpen])
 
