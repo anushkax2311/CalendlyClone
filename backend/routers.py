@@ -4,17 +4,17 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
-from .database import get_db
-from .models import EventType, AvailabilitySchedule, Booking, User, Schedule, DateOverride
-from .schemas import (
+from database import get_db
+from models import EventType, AvailabilitySchedule, Booking, User, Schedule, DateOverride
+from schemas import (
     EventTypeCreate, EventTypeUpdate, EventTypeOut,
     AvailabilityUpdate, AvailabilityOut, ScheduleOut, ScheduleCreate, ScheduleUpdate, DaySchedule,
     BookingCreate, BookingOut, RescheduleRequest,
     DateOverrideCreate, DateOverrideOut,
     PublicEventTypeOut, SlotOut,
 )
-from .slot_service import get_available_slots
-from .email_service import (
+from slot_service import get_available_slots
+from email_service import (
     send_booking_confirmation_to_invitee, send_booking_notification_to_host,
     send_cancellation_email,
 )

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from .models import User, EventType, AvailabilitySchedule, Booking, Schedule, DateOverride
+from models import User, EventType, AvailabilitySchedule, Booking, Schedule, DateOverride
 
 
 def seed_database(db: Session) -> None:

@@ -11,7 +11,7 @@ from datetime import date, datetime, timedelta
 from typing import List, Tuple, Optional
 from sqlalchemy.orm import Session
 
-from .models import AvailabilitySchedule, Booking, EventType, BlockedDate, Schedule, DateOverride
+from models import AvailabilitySchedule, Booking, EventType, BlockedDate, Schedule, DateOverride
 
 
 def _parse_hhmm(t: str) -> Tuple[int, int]:
