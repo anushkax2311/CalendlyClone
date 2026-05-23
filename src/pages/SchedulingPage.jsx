@@ -550,7 +550,8 @@ const filtered = Array.isArray(events)
             </div>
           ) : (
             <div className="event-cards-list">
-  {filtered.map(ev => (
+{filtered?.map(ev => (
+  ev && (
     <EventCard
       key={ev.id}
       event={ev}
@@ -560,7 +561,8 @@ const filtered = Array.isArray(events)
       openMenuId={openMenuId}
       setOpenMenuId={setOpenMenuId}
     />
-  ))}
+  )
+))}
 </div>
           )}
       </div>
