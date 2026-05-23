@@ -8,97 +8,192 @@ const DURATIONS = [15, 30, 45, 60, 90, 120]
 const COLORS = ['#006bff', '#6c3fc5', '#00a86b', '#e53935', '#ff6d00', '#0097a7']
 const BUFFERS = [0, 5, 10, 15, 30]
 
-function EventCard({ event, onEdit, onDelete, onCopyLink,openMenuId,
-  setOpenMenuId }) {
-  
+function EventCard({
+  event,
+  onEdit,
+  onDelete,
+  onCopyLink,
+  openMenuId,
+  setOpenMenuId
+}) {
   const [menuPos, setMenuPos] = useState({ top: 0, left: 0 })
   const btnRef = useRef(null)
+
   const bookingUrl = `${window.location.origin}/book/${event.slug}`
 
   const openMenu = () => {
-  const rect = btnRef.current.getBoundingClientRect()
+    const rect = btnRef.current.getBoundingClientRect()
 
-  setMenuPos({
-    top: rect.bottom + 4,
-    left: rect.right - 160
-  })
+    setMenuPos({
+      top: rect.bottom + 4,
+      left: rect.right - 160
+    })
 
-  setMenuOpen(prev => !prev)
-}
+    setOpenMenuId(prev =>
+      prev === event.id ? null : event.id
+    )
+  }
 
   useEffect(() => {
-    if (!menuOpen) return
+    if (openMenuId !== event.id) return
+
     const close = () => setOpenMenuId(null)
-    setTimeout(() => {
-  document.addEventListener('click', close)
-}, 0)
-    return () => document.removeEventListener('click', close)
-  }, [menuOpen])
+
+    document.addEventListener('click', close)
+
+    return () => {
+      document.removeEventListener('click', close)
+    }
+  }, [openMenuId, event.id, setOpenMenuId])
 
   return (
     <div className={`event-card ${!event.is_active ? 'inactive' : ''}`}>
-      <div className="event-card-color-bar" style={{ background: event.color || '#006bff' }} />
+      <div
+        className="event-card-color-bar"
+        style={{ background: event.color || '#006bff' }}
+      />
+
       <div className="event-card-body">
         <div className="event-card-header">
           <div>
             <h3 className="event-card-name">{event.name}</h3>
+
             <p className="event-card-meta">
               {event.duration_minutes} min
               {event.location && ` · ${event.location}`}
               {' · One-on-One'}
-              {(event.buffer_before > 0 || event.buffer_after > 0) && (
+
+              {(event.buffer_before > 0 ||
+                event.buffer_after > 0) && (
                 <span className="buffer-badge">
-                  {event.buffer_before > 0 && ` · ${event.buffer_before}m before`}
-                  {event.buffer_after > 0 && ` · ${event.buffer_after}m after`}
+                  {event.buffer_before > 0 &&
+                    ` · ${event.buffer_before}m before`}
+
+                  {event.buffer_after > 0 &&
+                    ` · ${event.buffer_after}m after`}
                 </span>
               )}
             </p>
+
             {event.questions?.length > 0 && (
-              <p className="event-card-questions">{event.questions.length} custom question{event.questions.length > 1 ? 's' : ''}</p>
+              <p className="event-card-questions">
+                {event.questions.length} custom question
+                {event.questions.length > 1 ? 's' : ''}
+              </p>
             )}
           </div>
+
           <div className="event-card-actions">
-            <a className="event-share-label" href={bookingUrl} target="_blank" rel="noreferrer">
+            <a
+              className="event-share-label"
+              href={bookingUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
               View booking page
             </a>
-            <button ref={btnRef} className="icon-btn" onClick={e => { e.stopPropagation(); const openMenu = () => {
-  const rect = btnRef.current.getBoundingClientRect()
 
-  setMenuPos({
-    top: rect.bottom + 4,
-    left: rect.right - 160
-  })
-
-  setOpenMenuId(prev => prev === event.id ? null : event.id)
-} }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#637488">
-                <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+            <button
+              ref={btnRef}
+              className="icon-btn"
+              onClick={(e) => {
+                e.stopPropagation()
+                openMenu()
+              }}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="#637488"
+              >
+                <circle cx="12" cy="5" r="1.5" />
+                <circle cx="12" cy="12" r="1.5" />
+                <circle cx="12" cy="19" r="1.5" />
               </svg>
             </button>
           </div>
         </div>
+
         <div className="event-card-footer">
           <label className="toggle-switch">
-            <input type="checkbox" checked={event.is_active}
-              onChange={() => onEdit({ ...event, is_active: !event.is_active, _toggle: true })} />
+            <input
+              type="checkbox"
+              checked={event.is_active}
+              onChange={() =>
+                onEdit({
+                  ...event,
+                  is_active: !event.is_active,
+                  _toggle: true
+                })
+              }
+            />
+
             <span className="toggle-slider" />
           </label>
-          <span className="toggle-label">{event.is_active ? 'Active' : 'Inactive'}</span>
+
+          <span className="toggle-label">
+            {event.is_active ? 'Active' : 'Inactive'}
+          </span>
         </div>
       </div>
 
-      {openMenuId === event.id && createPortal(
-        <div className="event-dropdown" style={{ position: 'fixed', top: menuPos.top, left: menuPos.left, zIndex: 9999 }}
-          onClick={e => e.stopPropagation()}>
-          <button onClick={() => { onEdit(event); setOpenMenuId(null) }}>Edit</button>
-          <button onClick={() => { onCopyLink(bookingUrl); setOpenMenuId(null) }}>Copy link</button>
-          <button onClick={() => { onEdit({ ...event, is_active: !event.is_active, _toggle: true }); setOpenMenuId(null) }}>
-            {event.is_active ? 'Deactivate' : 'Activate'}
-          </button>
-          <button className="danger" onClick={() => { onDelete(event.id); setOpenMenuId(null) }}>Delete</button>
-        </div>,
-        document.body
-      )}
+      {openMenuId === event.id &&
+        createPortal(
+          <div
+            className="event-dropdown"
+            style={{
+              position: 'fixed',
+              top: menuPos.top,
+              left: menuPos.left,
+              zIndex: 9999
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => {
+                onEdit(event)
+                setOpenMenuId(null)
+              }}
+            >
+              Edit
+            </button>
+
+            <button
+              onClick={() => {
+                onCopyLink(bookingUrl)
+                setOpenMenuId(null)
+              }}
+            >
+              Copy link
+            </button>
+
+            <button
+              onClick={() => {
+                onEdit({
+                  ...event,
+                  is_active: !event.is_active,
+                  _toggle: true
+                })
+
+                setOpenMenuId(null)
+              }}
+            >
+              {event.is_active ? 'Deactivate' : 'Activate'}
+            </button>
+
+            <button
+              className="danger"
+              onClick={() => {
+                onDelete(event.id)
+                setOpenMenuId(null)
+              }}
+            >
+              Delete
+            </button>
+          </div>,
+          document.body
+        )}
     </div>
   )
 }
